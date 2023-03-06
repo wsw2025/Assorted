@@ -3,22 +3,28 @@ import java.util.Arrays;
 import java.util.List;
 public class test {
     public static void main(String[] args) {
-        List<Integer> supermarket = new ArrayList(Arrays.asList(5,3,4));
-        List<Integer> supermarket2 = new ArrayList(Arrays.asList(10,2,3,3));
-        List<Integer> supermarket3 = new ArrayList(Arrays.asList(2,3,10));
-        List<Integer> supermarket4 = new ArrayList(Arrays.asList(2,3,10,2,3,10,8,7,4,12,4,6));
+//        List<String> directions = new ArrayList(Arrays.asList("NORTH", "SOUTH", "EAST", "WEST"));
+//        List<String> directions = new ArrayList(Arrays.asList("NORTH", "EAST", "WEST", "SOUTH", "WEST", "WEST"));
+//        List<String> directions = new ArrayList(Arrays.asList("NORTH", "NORTH", "EAST", "EAST", "NORTH", "WEST", "SOUTH", "WEST", "WEST"));
+        List<Integer> returnList = new ArrayList<>();
+        for (int i = 1; i <= 200;i++) {
+            String s = "" + i;
+            int num = 0;
+            for (int j = 0; j < s.length(); j++) {
+                num += Math.pow(Character.getNumericValue(s.charAt(j)), j + 1);
+//                System.out.println(s.charAt(j));
+//                System.out.println(Math.pow(Character.getNumericValue(s.charAt(j)), j + 1));
+            }
+            if (num == i){
+//                System.out.println("here");
+                returnList.add(i);
+            }
 
-        int result = Assorted.queueTime(supermarket, 1);
-        int result2 = Assorted.queueTime(supermarket2, 2);
-        int result3 = Assorted.queueTime(supermarket3, 2);
-        int result4 = Assorted.queueTime(supermarket4, 3);
-
-        System.out.println(result4);
-//        for (int j = 0; j < list4.size(); j++){
-//            System.out.println(list4.get(j));
-//        }
-
-
+        }
+        System.out.println(returnList.size());
+        for (int i = 0; i < returnList.size(); i++){
+            System.out.println(returnList.get(i));
+        }
 //
 //        for (int i = 0; i < listB.size(); i++){
 //            if(listA.contains(listB.get(i))){

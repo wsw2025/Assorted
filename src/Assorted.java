@@ -5,6 +5,7 @@ import java.util.List;
 
 import static java.lang.Integer.min;
 import static java.lang.Integer.parseInt;
+import static java.util.Arrays.sort;
 
 public class Assorted {
 
@@ -188,14 +189,28 @@ public class Assorted {
      */
     public static List<Integer> uniqueNumber(int lowerBound, int upperBound) {
         List<Integer> returnList = new ArrayList<>();
-        for (int i = lowerBound; i <= upperBound;i++){
+        for (int i = lowerBound; i <= upperBound;i++) {
+            String s = "" + i;
             int num = 0;
-            for (int j = 1; j <= i/10+1; j++){
-                num+=Math.pow((i%(j*10)),(i/10+1)-j);
+            for (int j = 0; j < s.length(); j++) {
+                num += Math.pow(Character.getNumericValue(s.charAt(j)), j + 1);
+//                System.out.println(s.charAt(j));
+//                System.out.println(Math.pow(Character.getNumericValue(s.charAt(j)), j + 1));
             }
-            if(num==i){
+            if (num == i){
+//                System.out.println("here");
                 returnList.add(i);
             }
+
+//            int num = 0;
+//            int temp = i;
+//            for (int j = 1; j <= i/10+1; j++){
+//                num+=Math.pow((temp%(j*10)),(i/10+1)-j+1);
+//            }
+//            System.out.println(num);
+//            if(num==i){
+//                returnList.add(i);
+//            }
         }
         return returnList;
     }
@@ -273,71 +288,88 @@ public class Assorted {
      *              ["WEST", "WEST"]
      */
     public static List<String> wildWest(List<String> directions) {
-        int x = 0;
-        int y = 0;
-        int i = 0;
-        while(i < directions.size()){
-            if(directions.get(i).equals("NORTH")){
-                y++;
-                if(y<=0){
-                    for (int j = i; j >= 0; j--){
-                        if(directions.get(j).equals("SOUTH")){
-                            directions.remove(j);
-                            break;
-                        }
-                    }
+        //AAA
+        String dir[][] = {{"NORTH", "SOUTH"}, {"EAST", "WEST"}, {"SOUTH", "NORTH"}, {"WEST", "EAST"}};
+        int i = 1;
+        while(i<directions.size()){
+            boolean re = false;
+            for (int j = 0; j < 4; j++){
+                if(directions.get(i)==dir[j][0] && directions.get(i-1)==dir[j][1]){
+                    directions.remove(i-1);
                     directions.remove(i-1);
                     i--;
-                }else{
-                    i++;
-                }
-            }else if(directions.get(i).equals("SOUTH")){
-                y--;
-                if(y>=0){
-                    for (int j = i; j >= 0; j--){
-                        if(directions.get(j).equals("NORTH")){
-                            directions.remove(j);
-                            break;
-                        }
-
-                    }
-                    directions.remove(i-1);
-                    i--;
-                }else{
-                    i++;
-                }
-            }else if(directions.get(i).equals("EAST")) {
-                x++;
-                if (x <= 0) {
-                    for (int j = i; j >= 0; j--) {
-                        if (directions.get(j).equals("WEST")) {
-                            directions.remove(j);
-                            break;
-                        }
-
-                    }
-                    directions.remove(i-1);
-                    i--;
-                } else {
-                    i++;
-                }
-            }else if(directions.get(i).equals("WEST")) {
-                x--;
-                if (x >= 0) {
-                    for (int j = i; j >= 0; j--) {
-                        if (directions.get(j).equals("EAST")) {
-                            directions.remove(j);
-                            break;
-                        }
-
-                    }
-                    directions.remove(i-1);
-                    i--;
-                } else {
-                    i++;
+                    if(i<1) i=1;
+                    re = true;
                 }
             }
+            if(!re) i++;
         }
+
+//        int x = 0;
+//        int y = 0;
+//        int i = 0;
+//        while(i < directions.size()){
+//            if(directions.get(i).equals("NORTH")){
+//                y++;
+//                if(y<=0){
+//                    for (int j = i; j >= 0; j--){
+//                        if(directions.get(j).equals("SOUTH")){
+//                            directions.remove(j);
+//                            break;
+//                        }
+//                    }
+//                    directions.remove(i-1);
+//                    i--;
+//                }else{
+//                    i++;
+//                }
+//            }else if(directions.get(i).equals("SOUTH")){
+//                y--;
+//                if(y>=0){
+//                    for (int j = i; j >= 0; j--){
+//                        if(directions.get(j).equals("NORTH")){
+//                            directions.remove(j);
+//                            break;
+//                        }
+//
+//                    }
+//                    directions.remove(i-1);
+//                    i--;
+//                }else{
+//                    i++;
+//                }
+//            }else if(directions.get(i).equals("EAST")) {
+//                x++;
+//                if (x <= 0) {
+//                    for (int j = i; j >= 0; j--) {
+//                        if (directions.get(j).equals("WEST")) {
+//                            directions.remove(j);
+//                            break;
+//                        }
+//
+//                    }
+//                    directions.remove(i-1);
+//                    i--;
+//                } else {
+//                    i++;
+//                }
+//            }else if(directions.get(i).equals("WEST")) {
+//                x--;
+//                if (x >= 0) {
+//                    for (int j = i; j >= 0; j--) {
+//                        if (directions.get(j).equals("EAST")) {
+//                            directions.remove(j);
+//                            break;
+//                        }
+//
+//                    }
+//                    directions.remove(i-1);
+//                    i--;
+//                } else {
+//                    i++;
+//                }
+//            }
+//        }
         return directions;
     }
 
@@ -362,18 +394,23 @@ public class Assorted {
      *              queueTime([2,3,10], 2) returns 12
      */
     public static int queueTime(List<Integer> queue, int tillsOpen) {
-        int time = 0;
-        while(!queue.isEmpty()){
-            for(int i = 0; i < min(tillsOpen, queue.size());  i++){
-                queue.set(i, queue.get(i)-1);
-                if(queue.get(i)==0){
-//                    System.out.println(i + " " + (time+1) + queue.get(i+1));
-
-                    queue.remove(i);
-                }
-            }
-            time++;
+//        int time = 0;
+//        while(!queue.isEmpty()){
+//            for(int i = 0; i < min(tillsOpen, queue.size());  i++){
+//                queue.set(i, queue.get(i)-1);
+//                if(queue.get(i)==0){
+////                    System.out.println(i + " " + (time+1) + queue.get(i+1));
+//
+//                    queue.remove(i);
+//                }
+//            }
+//            time++;
+//        }
+        int tills[] = new int[tillsOpen];
+        for (int i = 0; i < queue.size(); i++){
+            tills[0]+=queue.get(i);
+            sort(tills);
         }
-        return time;
+        return tills[tillsOpen-1];
     }
 }
